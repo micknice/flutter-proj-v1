@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "45518377100",
+    "project_id": "nice-news-v1",
+    "storage_bucket": "nice-news-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45518377100:android:85939359f7c818a0602ba9",
+        "android_client_info": {
+          "package_name": "com.notes.mynotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45518377100-7hevv2odmn5m1c6q8gpk13dg71i9retk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8gCiphvJsehNN-YL3Gm0_OGjVt893tvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "45518377100-7hevv2odmn5m1c6q8gpk13dg71i9retk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

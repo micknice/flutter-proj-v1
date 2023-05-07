@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>45518377100-rcpivlqti7br1c2j2atdls222m8v5pjl.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.45518377100-rcpivlqti7br1c2j2atdls222m8v5pjl</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAunmrjhaaGYROomT1Yw-QgoPWfG754OEI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>45518377100</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.notes.mynotes</string>
+	<key>PROJECT_ID</key>
+	<string>nice-news-v1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>nice-news-v1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:45518377100:ios:bf752aa6da24f023602ba9</string>
+</dict>
+</plist>
