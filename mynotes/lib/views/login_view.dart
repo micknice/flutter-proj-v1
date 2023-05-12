@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:mynotes/constants/routes.dart';
+
+import '../utils/show_error_dialogue.dart';
+
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}): super(key: key);
@@ -70,28 +74,39 @@ class _LoginViewState extends State<LoginView> {
                     );
                     devtools.log(userCredential.toString());
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/notes', 
+                      notesRoute, 
                       (route) => false,
                     );
                     
 
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'user-not-found'){
-                      devtools.log('ERROR:');
-                      devtools.log(e.code.toString());
+                        await showErrorDialog(
+                          context, 'User not found',
+                        );
                       } else if (e.code == 'wrong-password'){
-                        devtools.log('ERROR:');
-                        devtools.log(e.code.toString());
-                      }
-    
-                    } 
+                        await showErrorDialog(
+                          context, 'Wrong password',
+                        );
+                      } else {
+                        await showErrorDialog(
+                          context, 
+                          'Error: ${e.code}',
+                        );
+                      }   
+                    } catch (e) {
+                      await showErrorDialog(
+                        context, 
+                        e.toString(),
+                      );
+                    }
                   },              
                 child: const Text('Login'),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/register', 
+                      registerRoute, 
                       (route) => false);
                   }, 
                   child: const Text('Not registered yet? Register Here!'),
