@@ -23,6 +23,7 @@ void main() {
         '/login': (context) => const LoginView(),
         '/register': (context) => const RegisterView(),
         '/verify_email': (context) => const VerifyEmailView(),
+        '/notes': (context) => const NotesView(),
       },
     ),
   );
