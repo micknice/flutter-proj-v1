@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '45518377100',
     projectId: 'nice-news-v1',
     storageBucket: 'nice-news-v1.appspot.com',
-    iosClientId: '45518377100-rcpivlqti7br1c2j2atdls222m8v5pjl.apps.googleusercontent.com',
+    iosClientId:
+        '45518377100-rcpivlqti7br1c2j2atdls222m8v5pjl.apps.googleusercontent.com',
     iosBundleId: 'com.notes.mynotes',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '45518377100',
     projectId: 'nice-news-v1',
     storageBucket: 'nice-news-v1.appspot.com',
-    iosClientId: '45518377100-rcpivlqti7br1c2j2atdls222m8v5pjl.apps.googleusercontent.com',
+    iosClientId:
+        '45518377100-rcpivlqti7br1c2j2atdls222m8v5pjl.apps.googleusercontent.com',
     iosBundleId: 'com.notes.mynotes',
   );
 }
