@@ -101,18 +101,18 @@ class _NewNotesViewState extends State<NewNotesView> {
 
   void _setupTextControllerListener() {
     _jobName.removeListener(_textControllerListener);
-    _roomName.removeListener(_textControllerListener);
-    _roomArea.removeListener(_textControllerListener);
-    _roomHeight.removeListener(_textControllerListener);
-    _openingArea.removeListener(_textControllerListener);
-    _typicalWindSpeed.removeListener(_textControllerListener);
+    // _roomName.removeListener(_textControllerListener);
+    // _roomArea.removeListener(_textControllerListener);
+    // _roomHeight.removeListener(_textControllerListener);
+    // _openingArea.removeListener(_textControllerListener);
+    // _typicalWindSpeed.removeListener(_textControllerListener);
 
     _jobName.addListener(_textControllerListener);
-    _roomName.addListener(_textControllerListener);
-    _roomArea.addListener(_textControllerListener);
-    _roomHeight.addListener(_textControllerListener);
-    _openingArea.addListener(_textControllerListener);
-    _typicalWindSpeed.addListener(_textControllerListener);
+    // _roomName.addListener(_textControllerListener);
+    // _roomArea.addListener(_textControllerListener);
+    // _roomHeight.addListener(_textControllerListener);
+    // _openingArea.addListener(_textControllerListener);
+    // _typicalWindSpeed.addListener(_textControllerListener);
   }
 
   @override
