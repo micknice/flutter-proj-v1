@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:mynotes/services/crud/crud_exceptions.dart';
 import 'package:sqflite/sqflite.dart';
@@ -50,6 +49,16 @@ class NotesService {
     required String job,
     required String room,
   }) async {
+    print('updateNotes args!!');
+    print('notes');
+    print(notes);
+    print('result');
+    print(result);
+    print('job');
+    print(job);
+    print('room');
+    print(room);
+    print('updateNotes args!!');
     await _checkDbOpen();
     final db = _getDatabaseOrThrow();
     //check exists
@@ -61,10 +70,14 @@ class NotesService {
       roomColumn: room,
       cloudSyncedColumn: 0,
     });
+    print('updateCount');
+    print(updateCount);
     if (updateCount == 0) {
       throw CouldNotUpdateNote();
     } else {
       final updatedNote = await getNote(id: notes.id);
+      print('updatedNote');
+      print(updatedNote);
       //remove old from cache
       _notes.removeWhere((note) => note.id == updatedNote.id);
       //cache updated

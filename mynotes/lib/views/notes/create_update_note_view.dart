@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/crud/notes_service.dart';
 import 'package:mynotes/utils/calcs.dart';
+import 'package:mynotes/utils/generics/get_arguments.dart';
 
-class NewNotesView extends StatefulWidget {
-  const NewNotesView({Key? key}) : super(key: key);
+class CreatUpdateNoteView extends StatefulWidget {
+  const CreatUpdateNoteView({Key? key}) : super(key: key);
 
   @override
-  State<NewNotesView> createState() => _NewNotesViewState();
+  State<CreatUpdateNoteView> createState() => _CreatUpdateNoteViewState();
 }
 
-class _NewNotesViewState extends State<NewNotesView> {
+class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
   DatabaseNotes? _notes;
   late final NotesService _notesService;
 
@@ -44,7 +45,16 @@ class _NewNotesViewState extends State<NewNotesView> {
     }
   }
 
-  Future<DatabaseNotes> createNewNote() async {
+  Future<DatabaseNotes> createOrGetExistingNote(BuildContext context) async {
+    final widgetNote = context.getArgument<DatabaseNotes>();
+    
+    if (widgetNote != null) {
+      _notes = widgetNote;
+      _jobName.text = widgetNote.job;
+      _roomName.text = widgetNote.room;
+      // _result.text = widgetNote.result;
+      return widgetNote;
+    }
     final existingNote = _notes;
     if (existingNote != null) {
       return existingNote;
@@ -52,7 +62,9 @@ class _NewNotesViewState extends State<NewNotesView> {
     final currentUser = AuthService.firebase().currentUser!;
     final email = currentUser.email!;
     final owner = await _notesService.getUser(email: email);
-    return await _notesService.createNote(owner: owner);
+    final newNote = await _notesService.createNote(owner: owner);
+    _notes = newNote;
+    return newNote;
   }
 
   void _deleteNoteIfEmpty() {
@@ -71,6 +83,8 @@ class _NewNotesViewState extends State<NewNotesView> {
     _roomHeight = TextEditingController();
     _openingArea = TextEditingController();
     _typicalWindSpeed = TextEditingController();
+    print(_jobName.text);
+    print(_roomName.text);
     super.initState();
   }
 
@@ -125,6 +139,8 @@ class _NewNotesViewState extends State<NewNotesView> {
     _roomHeight.dispose();
     _openingArea.dispose();
     _typicalWindSpeed.dispose();
+    print(_jobName.text);
+    print(_roomName.text);
     super.dispose();
   }
 
@@ -135,11 +151,10 @@ class _NewNotesViewState extends State<NewNotesView> {
           title: const Text('New note'),
         ),
         body: FutureBuilder(
-            future: createNewNote(),
+            future: createOrGetExistingNote(context),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  _notes = snapshot.data as DatabaseNotes;
                   _setupTextControllerListener();
                   return SingleChildScrollView(
                     child: Column(
