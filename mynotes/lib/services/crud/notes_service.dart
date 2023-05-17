@@ -64,12 +64,17 @@ class NotesService {
     //check exists
     await getNote(id: notes.id);
     //update db
-    final updateCount = await db.update(notesTable, {
-      resultColumn: result,
-      jobColumn: job,
-      roomColumn: room,
-      cloudSyncedColumn: 0,
-    });
+    final updateCount = await db.update(
+      notesTable,
+      {
+        resultColumn: result,
+        jobColumn: job,
+        roomColumn: room,
+        cloudSyncedColumn: 0,
+      },
+      where: 'id = ?',
+      whereArgs: [notes.id],
+    );
     print('updateCount');
     print(updateCount);
     if (updateCount == 0) {
