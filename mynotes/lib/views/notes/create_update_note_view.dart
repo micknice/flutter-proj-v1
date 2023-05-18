@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/utils/calcs.dart';
+import 'package:mynotes/utils/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:mynotes/utils/generics/get_arguments.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/services/cloud/cloud_storage_exceptions.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreatUpdateNoteView extends StatefulWidget {
   const CreatUpdateNoteView({Key? key}) : super(key: key);
@@ -24,6 +26,14 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
   late final TextEditingController _openingArea;
   late final TextEditingController _typicalWindSpeed;
   late final TextEditingController _result;
+
+  void recalc() {
+    print('recalc invoked');
+    setState(() {
+      _result.text = calculateNaturalFlow(_roomArea.text, _roomHeight.text,
+          _openingArea.text, _typicalWindSpeed.text);
+    });
+  }
 
   void _saveNoteIfTextNotEmpty() async {
     final notes = _notes;
@@ -168,6 +178,19 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('New note'),
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  final resultText =
+                      '${_jobName.text} - ${_roomName.text} - ${_result.text}';
+                  if (_notes == null || resultText.isEmpty) {
+                    await showCannotShareEmptyNoteDialog(context);
+                  } else {
+                    Share.share(resultText);
+                  }
+                },
+                icon: const Icon(Icons.share)),
+          ],
         ),
         body: FutureBuilder(
             future: createOrGetExistingNote(context),
@@ -182,105 +205,109 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
-                              controller: _jobName,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                hintText: 'Job name',
-                              )),
+                            controller: _jobName,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            keyboardType: TextInputType.text,
+                            // decoration: const InputDecoration(
+                            //   hintText: 'Job name',
+                            // )
+                          ),
                         ),
                         const Text('Room name:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
-                              controller: _roomName,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                hintText: 'Room name',
-                              )),
+                            controller: _roomName,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            keyboardType: TextInputType.text,
+                            // decoration: const InputDecoration(
+                            //   hintText: 'Room name',
+                            // )
+                          ),
                         ),
                         const Text('Room area:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
-                              controller: _roomArea,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                decimal: true,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Room area',
-                              )),
+                            controller: _roomArea,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            // decoration: const InputDecoration(
+                            //   hintText: 'Room area',
+                            // )
+                          ),
                         ),
                         const Text('Room height:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
-                              controller: _roomHeight,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                decimal: true,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Room height',
-                              )),
+                            controller: _roomHeight,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            // decoration: const InputDecoration(
+                            //   hintText: 'Room height',
+                            // )
+                          ),
                         ),
                         const Text('Opening area:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
-                              controller: _openingArea,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                decimal: true,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Opening area',
-                              )),
+                            controller: _openingArea,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            // decoration: const InputDecoration(
+                            //   hintText: 'Opening area',
+                            // )
+                          ),
                         ),
                         const Text('Typical wind speed:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
-                              controller: _typicalWindSpeed,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                decimal: true,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Typical wind speed',
-                              )),
+                            controller: _typicalWindSpeed,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            // decoration: const InputDecoration(
+                            //   hintText: 'Typical wind speed',
+                            // )
+                          ),
                         ),
                         const Text('Result:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
-                              controller: _result,
-                              readOnly: true,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                decimal: true,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Result',
-                              )),
+                            controller: _result,
+                            readOnly: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            // decoration: const InputDecoration(
+                            //   hintText: 'Result',
+                            // )
+                          ),
                         ),
-                        const TextButton(
-                          onPressed: null,
-                          child: Text('Calculate'),
+                        TextButton(
+                          onPressed: () {
+                            recalc();
+                          },
+                          child: const Text('Calculate'),
                         ),
                       ],
                     ),
