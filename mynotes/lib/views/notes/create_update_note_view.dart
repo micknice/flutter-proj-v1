@@ -47,7 +47,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
 
   Future<DatabaseNotes> createOrGetExistingNote(BuildContext context) async {
     final widgetNote = context.getArgument<DatabaseNotes>();
-    
+
     if (widgetNote != null) {
       _notes = widgetNote;
       _jobName.text = widgetNote.job;
@@ -237,6 +237,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                                 hintText: 'Typical wind speed',
                               )),
                         ),
+                        const Text('Result'),
                       ],
                     ),
                   );
