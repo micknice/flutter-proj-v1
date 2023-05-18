@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
-import 'package:mynotes/services/crud/notes_service.dart';
 import 'package:mynotes/utils/calcs.dart';
 import 'package:mynotes/utils/generics/get_arguments.dart';
+import 'package:mynotes/services/cloud/cloud_note.dart';
+import 'package:mynotes/services/cloud/cloud_storage_exceptions.dart';
+import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
 
 class CreatUpdateNoteView extends StatefulWidget {
   const CreatUpdateNoteView({Key? key}) : super(key: key);
@@ -12,8 +14,8 @@ class CreatUpdateNoteView extends StatefulWidget {
 }
 
 class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
-  DatabaseNotes? _notes;
-  late final NotesService _notesService;
+  CloudNote? _notes;
+  late final FirebaseCloudStorage _notesService;
 
   late final TextEditingController _jobName;
   late final TextEditingController _roomName;
@@ -21,6 +23,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
   late final TextEditingController _roomHeight;
   late final TextEditingController _openingArea;
   late final TextEditingController _typicalWindSpeed;
+  late final TextEditingController _result;
 
   void _saveNoteIfTextNotEmpty() async {
     final notes = _notes;
@@ -40,19 +43,31 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
         typicalWindSpeed.isNotEmpty) {
       final result = calculateNaturalFlow(
           roomArea, roomHeight, openingArea, typicalWindSpeed);
-      await _notesService.updateNotes(
-          notes: notes, result: result, job: jobName, room: roomName);
+      await _notesService.updateNote(
+        documentId: notes.documentId,
+        jobName: jobName,
+        roomName: roomName,
+        roomArea: roomArea,
+        roomHeight: roomHeight,
+        openingArea: openingArea,
+        typicalWindSpeed: typicalWindSpeed,
+        result: result,
+      );
     }
   }
 
-  Future<DatabaseNotes> createOrGetExistingNote(BuildContext context) async {
-    final widgetNote = context.getArgument<DatabaseNotes>();
+  Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
+    final widgetNote = context.getArgument<CloudNote>();
 
     if (widgetNote != null) {
       _notes = widgetNote;
-      _jobName.text = widgetNote.job;
-      _roomName.text = widgetNote.room;
-      // _result.text = widgetNote.result;
+      _jobName.text = widgetNote.jobName;
+      _roomName.text = widgetNote.roomName;
+      _roomArea.text = widgetNote.roomArea;
+      _roomHeight.text = widgetNote.roomHeight;
+      _openingArea.text = widgetNote.openingArea;
+      _typicalWindSpeed.text = widgetNote.typicalWindSpeed;
+      _result.text = widgetNote.result;
       return widgetNote;
     }
     final existingNote = _notes;
@@ -60,9 +75,8 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
       return existingNote;
     }
     final currentUser = AuthService.firebase().currentUser!;
-    final email = currentUser.email;
-    final owner = await _notesService.getUser(email: email);
-    final newNote = await _notesService.createNote(owner: owner);
+    final userId = currentUser.id;
+    final newNote = await _notesService.createNewNote(ownerUserId: userId);
     _notes = newNote;
     return newNote;
   }
@@ -70,21 +84,20 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
   void _deleteNoteIfEmpty() {
     final note = _notes;
     if (_jobName.text.isEmpty && note != null) {
-      _notesService.deleteNote(id: note.id);
+      _notesService.deleteNote(documentId: note.documentId);
     }
   }
 
   @override
   void initState() {
-    _notesService = NotesService();
+    _notesService = FirebaseCloudStorage();
     _jobName = TextEditingController();
     _roomName = TextEditingController();
     _roomArea = TextEditingController();
     _roomHeight = TextEditingController();
     _openingArea = TextEditingController();
     _typicalWindSpeed = TextEditingController();
-    print(_jobName.text);
-    print(_roomName.text);
+    _result = TextEditingController();
     super.initState();
   }
 
@@ -109,8 +122,16 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
       result = calculateNaturalFlow(
           roomArea, roomHeight, openingArea, typicalWindSpeed);
     }
-    await _notesService.updateNotes(
-        notes: notes, result: result, job: jobName, room: roomName);
+    await _notesService.updateNote(
+      documentId: notes.documentId,
+      jobName: jobName,
+      roomName: roomName,
+      roomArea: roomArea,
+      roomHeight: roomHeight,
+      openingArea: openingArea,
+      typicalWindSpeed: typicalWindSpeed,
+      result: result,
+    );
   }
 
   void _setupTextControllerListener() {
@@ -139,8 +160,6 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
     _roomHeight.dispose();
     _openingArea.dispose();
     _typicalWindSpeed.dispose();
-    print(_jobName.text);
-    print(_roomName.text);
     super.dispose();
   }
 
@@ -159,6 +178,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
+                        const Text('Job name:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -170,6 +190,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                                 hintText: 'Job name',
                               )),
                         ),
+                        const Text('Room name:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -181,6 +202,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                                 hintText: 'Room name',
                               )),
                         ),
+                        const Text('Room area:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -195,6 +217,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                                 hintText: 'Room area',
                               )),
                         ),
+                        const Text('Room height:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -209,6 +232,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                                 hintText: 'Room height',
                               )),
                         ),
+                        const Text('Opening area:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -223,6 +247,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                                 hintText: 'Opening area',
                               )),
                         ),
+                        const Text('Typical wind speed:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -237,7 +262,26 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                                 hintText: 'Typical wind speed',
                               )),
                         ),
-                        const Text('Result'),
+                        const Text('Result:'),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextField(
+                              controller: _result,
+                              readOnly: true,
+                              enableSuggestions: false,
+                              autocorrect: false,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                decimal: true,
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: 'Result',
+                              )),
+                        ),
+                        const TextButton(
+                          onPressed: null,
+                          child: Text('Calculate'),
+                        ),
                       ],
                     ),
                   );

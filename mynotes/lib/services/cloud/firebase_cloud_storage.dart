@@ -44,8 +44,8 @@ class FirebaseCloudStorage {
           .map((doc) => CloudNote.fromSnapshot(doc))
           .where((note) => note.ownerUserId == ownerUserId));
 
-  void createNewNote({required String ownerUserId}) async {
-    await notes.add({
+  Future<CloudNote> createNewNote({required String ownerUserId}) async {
+    final document = await notes.add({
       ownerUserIdField: ownerUserId,
       jobNameField: '',
       roomNameField: '',
@@ -55,6 +55,18 @@ class FirebaseCloudStorage {
       typicalWindSpeedField: '',
       resultField: '',
     });
+    final fetchedNote = await document.get();
+    return CloudNote(
+      documentId: fetchedNote.id,
+      ownerUserId: ownerUserId,
+      jobName: '',
+      roomName: '',
+      roomArea: '',
+      roomHeight: '',
+      openingArea: '',
+      typicalWindSpeed: '',
+      result: '',
+    );
   }
 
   Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
@@ -63,21 +75,7 @@ class FirebaseCloudStorage {
           .where(ownerUserIdField, isEqualTo: ownerUserId)
           .get()
           .then(
-            (value) => value.docs.map(
-              (doc) {
-                return CloudNote(
-                  documentId: doc.id,
-                  ownerUserId: doc.data()[ownerUserIdField] as String,
-                  jobName: doc.data()[jobNameField] as String,
-                  roomName: doc.data()[roomNameField] as String,
-                  roomArea: doc.data()[roomAreaField] as String,
-                  roomHeight: doc.data()[roomHeightField] as String,
-                  openingArea: doc.data()[openingAreaField] as String,
-                  typicalWindSpeed: doc.data()[typicalWindSpeedField] as String,
-                  result: doc.data()[resultField] as String,
-                );
-              },
-            ),
+            (value) => value.docs.map((doc) => CloudNote.fromSnapshot(doc)),
           );
     } catch (e) {
       throw CouldNotGetAllNotesException();
