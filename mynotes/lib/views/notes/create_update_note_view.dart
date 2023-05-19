@@ -182,7 +182,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
             IconButton(
                 onPressed: () async {
                   final resultText =
-                      '${_jobName.text} - ${_roomName.text} - ${_result.text}';
+                      'Shared flow-note: ${_jobName.text} - ${_roomName.text} - ${_result.text}';
                   if (_notes == null || resultText.isEmpty) {
                     await showCannotShareEmptyNoteDialog(context);
                   } else {
