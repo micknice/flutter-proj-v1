@@ -22,17 +22,20 @@ class NotesListView extends StatelessWidget {
       itemCount: notes.length,
       itemBuilder: (context, index) {
         final note = notes.elementAt(index);
-        print(notes);
         return ListTile(
           onTap: () {
             onTap(note);
           },
           title: Text(
-            '${note.jobName}-${note.roomName}-${note.result}',
+            'Job: ${note.jobName}.  Room: ${note.roomName}.',
             maxLines: 1,
             softWrap: true,
             overflow: TextOverflow.ellipsis,
           ),
+          subtitle: Text(
+            'Natural Ventilation: ${note.result}',
+          ),
+          isThreeLine: true,
           trailing: IconButton(
               onPressed: () async {
                 final shouldDelete = await showDeleteDialog(context);

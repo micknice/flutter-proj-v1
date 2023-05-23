@@ -28,7 +28,6 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
   late final TextEditingController _result;
 
   void recalc() {
-    print('recalc invoked');
     setState(() {
       _result.text = calculateNaturalFlow(_roomArea.text, _roomHeight.text,
           _openingArea.text, _typicalWindSpeed.text);
@@ -146,18 +145,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
 
   void _setupTextControllerListener() {
     _jobName.removeListener(_textControllerListener);
-    // _roomName.removeListener(_textControllerListener);
-    // _roomArea.removeListener(_textControllerListener);
-    // _roomHeight.removeListener(_textControllerListener);
-    // _openingArea.removeListener(_textControllerListener);
-    // _typicalWindSpeed.removeListener(_textControllerListener);
-
     _jobName.addListener(_textControllerListener);
-    // _roomName.addListener(_textControllerListener);
-    // _roomArea.addListener(_textControllerListener);
-    // _roomHeight.addListener(_textControllerListener);
-    // _openingArea.addListener(_textControllerListener);
-    // _typicalWindSpeed.addListener(_textControllerListener);
   }
 
   @override
@@ -209,9 +197,6 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                             enableSuggestions: false,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
-                            // decoration: const InputDecoration(
-                            //   hintText: 'Job name',
-                            // )
                           ),
                         ),
                         const Text('Room name:'),
@@ -222,12 +207,9 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                             enableSuggestions: false,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
-                            // decoration: const InputDecoration(
-                            //   hintText: 'Room name',
-                            // )
                           ),
                         ),
-                        const Text('Room area:'),
+                        const Text('Room area m2:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -237,12 +219,9 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            // decoration: const InputDecoration(
-                            //   hintText: 'Room area',
-                            // )
                           ),
                         ),
-                        const Text('Room height:'),
+                        const Text('Room height m:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -252,12 +231,9 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            // decoration: const InputDecoration(
-                            //   hintText: 'Room height',
-                            // )
                           ),
                         ),
-                        const Text('Opening area:'),
+                        const Text('Opening area m2:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -267,12 +243,9 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            // decoration: const InputDecoration(
-                            //   hintText: 'Opening area',
-                            // )
                           ),
                         ),
-                        const Text('Typical wind speed:'),
+                        const Text('Typical wind speed m/s:'),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextField(
@@ -282,9 +255,6 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            // decoration: const InputDecoration(
-                            //   hintText: 'Typical wind speed',
-                            // )
                           ),
                         ),
                         const Text('Result:'),
@@ -298,9 +268,6 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            // decoration: const InputDecoration(
-                            //   hintText: 'Result',
-                            // )
                           ),
                         ),
                         TextButton(
