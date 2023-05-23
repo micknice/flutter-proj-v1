@@ -86,9 +86,11 @@ class _NotesViewState extends State<NotesView> {
                   },
                 );
               } else {
+                print('else block line 89 notes view');
                 return const CircularProgressIndicator();
               }
             default:
+              print('else block line 93 notes view');
               return const CircularProgressIndicator();
           }
         },

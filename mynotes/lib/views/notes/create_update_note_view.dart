@@ -67,6 +67,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
 
   Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
     final widgetNote = context.getArgument<CloudNote>();
+    print(widgetNote);
 
     if (widgetNote != null) {
       _notes = widgetNote;
@@ -131,6 +132,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
       result = calculateNaturalFlow(
           roomArea, roomHeight, openingArea, typicalWindSpeed);
     }
+    print('notesService updateNote invoked');
     await _notesService.updateNote(
       documentId: notes.documentId,
       jobName: jobName,
