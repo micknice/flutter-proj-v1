@@ -67,30 +67,27 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
   }
 
   Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
-    // final widgetNote = context.getArguments<CloudNote>();
-    final widgetNote = ModalRoute.of(context)!.settings.arguments;
+    final widgetNote = context.getArgument<CloudNote>();
+    print('widgetNote');
+    print(widgetNote);
+
     if (widgetNote != null) {
-      if (widgetNote is NotesViewArgsWithNote) {
-        final argsWithNote = widgetNote;
-        final note = argsWithNote.note;
-        final jobId = argsWithNote.documentId;
-        final jobName = argsWithNote.jobName;
-        final jobType = argsWithNote.jobType;
-        final jobSubType = argsWithNote.jobSubType;
-        _notes = note;
-        _jobName.text = note.jobName;
-        _roomName.text = note.roomName;
-        _roomArea.text = note.roomArea;
-        _roomHeight.text = note.roomHeight;
-        _openingArea.text = note.openingArea;
-        _typicalWindSpeed.text = note.typicalWindSpeed;
-        _result.text = note.result;
-        return note;
-      }
-      
+      print('widgetnote != null');
+      print(widgetNote.openingArea);
+      _notes = widgetNote;
+      _jobName.text = widgetNote.jobName;
+      _roomName.text = widgetNote.roomName;
+      _roomArea.text = widgetNote.roomArea;
+      _roomHeight.text = widgetNote.roomHeight;
+      _openingArea.text = widgetNote.openingArea;
+      _typicalWindSpeed.text = widgetNote.typicalWindSpeed;
+      _result.text = widgetNote.result;
+      return widgetNote;
     }
     final existingNote = _notes;
     if (existingNote != null) {
+      print('existingnote != null');
+      print(existingNote.openingArea);
       return existingNote;
     }
     final currentUser = AuthService.firebase().currentUser!;
@@ -141,6 +138,7 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
       result = calculateNaturalFlow(
           roomArea, roomHeight, openingArea, typicalWindSpeed);
     }
+    print('notesService updateNote invoked');
     await _notesService.updateNote(
       documentId: notes.documentId,
       jobName: jobName,
@@ -160,37 +158,39 @@ class _CreatUpdateNoteViewState extends State<CreatUpdateNoteView> {
 
   @override
   void dispose() {
+    _deleteNoteIfEmpty();
+    _saveNoteIfTextNotEmpty();
     _jobName.dispose();
     _roomName.dispose();
     _roomArea.dispose();
     _roomHeight.dispose();
     _openingArea.dispose();
     _typicalWindSpeed.dispose();
-    _deleteNoteIfEmpty();
-    _saveNoteIfTextNotEmpty();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments;
-    print(arguments);
-    if (arguments is NotesViewArgsWithNote) {
-      final argsWithNote = arguments;
-      final note = argsWithNote.note;
-      final jobId = argsWithNote.documentId;
-      final jobName = argsWithNote.jobName;
-      final jobType = argsWithNote.jobType;
-      final jobSubType = argsWithNote.jobSubType;
-      _jobName.text = jobName;
-    } else if (arguments is NotesViewArgs) {
-      final args = arguments;
-      final jobId = args.documentId;
-      final jobName = args.jobName;
-      final jobType = args.jobType;
-      final jobSubType = args.jobSubType;
-      _jobName.text = jobName;
-    }
+    // final arguments = ModalRoute.of(context)!.settings.arguments;
+    // print(arguments);
+    // if (arguments is NotesViewArgsWithNote) {
+    //   print('first condition');
+    //   final argsWithNote = arguments;
+    //   final note = argsWithNote.note;
+    //   final jobId = argsWithNote.documentId;
+    //   final jobName = argsWithNote.jobName;
+    //   final jobType = argsWithNote.jobType;
+    //   final jobSubType = argsWithNote.jobSubType;
+    //   _jobName.text = jobName;
+    // } else if (arguments is NotesViewArgs) {
+    //   print('second condition');
+    //   final args = arguments;
+    //   final jobId = args.documentId;
+    //   final jobName = args.jobName;
+    //   final jobType = args.jobType;
+    //   final jobSubType = args.jobSubType;
+    //   _jobName.text = jobName;
+    // }
 
     return Scaffold(
         appBar: AppBar(

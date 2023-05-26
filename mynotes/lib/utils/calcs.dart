@@ -7,6 +7,20 @@ String calculateNaturalFlow(
   double volume = rmAr * rmHght;
   double flowRate = opngAr * wndSpd;
   double result = volume / flowRate;
-  final resultString = result.toString();
+  final resultString = result.toStringAsFixed(2);
   return resultString;
+}
+
+String sumFlowForAllRooms(allResults) {
+  final allResultsDoubles = allResults.map((e) => double.parse(e.result));
+  double sum = allResultsDoubles.fold(0, (p, c) => p + c);
+  final resultString = sum.toStringAsFixed(2);
+  return resultString;
+}
+
+String getTotalNaturalFlowForJob(allJobNotes) {
+  final doubleIterable = allJobNotes.map((e) => double.parse(e.result));
+  double sum = doubleIterable.fold(0, (p, c) => p + c);
+  final sumString = sum.toStringAsFixed(2);
+  return sumString;
 }

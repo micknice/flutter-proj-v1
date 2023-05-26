@@ -7,7 +7,6 @@ import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
-import 'package:mynotes/utils/calcs.dart';
 
 import 'package:mynotes/utils/dialogs/logout_dialog.dart';
 import 'package:mynotes/views/notes/jobs_view.dart';
@@ -96,11 +95,14 @@ class _NotesViewState extends State<NotesView> {
                       final allNotes = snapshot.data as Iterable<CloudNote>;
                       final allJobNotes =
                           allNotes.where((n) => n.jobName == jobName);
-                      if (_sumString == '') {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          getTotal(allJobNotes);
-                        });
-                      }
+                      // final test =
+                      //     snapshot.data!.map((e) => double.parse(e.result));
+                      // double sum = test.fold(0, (p, c) => p + c);
+                      // print('XXXXXXXX');
+                      // final sumString = sum.toStringAsFixed(2);
+                      // // NEED TO WRITE A FUNCTION TO DO
+                      // _sumString = sumString;
+                      // print(sumString);
 
                       return NotesListView(
                         notes: allJobNotes,
@@ -114,7 +116,12 @@ class _NotesViewState extends State<NotesView> {
                           Navigator.of(context).pushNamed(
                             createOrUpdateNotesRoute,
                             arguments: NotesViewArgsWithNote(
-                                note, documentId, jobName, jobType, jobSubType),
+                              note,
+                              documentId,
+                              jobName,
+                              jobType,
+                              jobSubType,
+                            ),
                           );
                         },
                       );
@@ -129,35 +136,29 @@ class _NotesViewState extends State<NotesView> {
           ),
           Container(
             padding: const EdgeInsets.all(16.0),
-            child: Text(_sumString),
+            child: Text('Natural flow for job total: $_sumString'),
           ),
         ],
       ),
     );
   }
-
-  void getTotal(allJobNotes) {
-    setState(() {
-      _sumString =
-          'Total natural ventilation for job: ${getTotalNaturalFlowForJob(allJobNotes)}';
-    });
-  }
 }
 
 class NotesViewArgs {
+  
   final String documentId;
   final String jobName;
   final String jobType;
   final String jobSubType;
 
   NotesViewArgs(
+    
     this.documentId,
     this.jobName,
     this.jobType,
     this.jobSubType,
   );
 }
-
 class NotesViewArgsWithNote {
   final CloudNote note;
   final String documentId;

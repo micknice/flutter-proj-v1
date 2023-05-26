@@ -12,3 +12,14 @@ extension GetArgument on BuildContext {
     return null;
   }
 }
+
+extension GetArguments on BuildContext {
+  T? getArguments<T>() {
+    final modalRoute = ModalRoute.of(this);
+    if (modalRoute != null) {
+      final args = modalRoute.settings.arguments;
+      return args as T;
+    }
+    return null;
+  }
+}

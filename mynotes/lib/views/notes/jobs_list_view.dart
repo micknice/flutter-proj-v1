@@ -1,46 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:mynotes/services/cloud/cloud_job.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/utils/dialogs/delete_dialog.dart';
 
-typedef NoteCallback = void Function(CloudNote note);
+typedef JobCallback = void Function(CloudJob job);
 
-class NotesListView extends StatelessWidget {
-  final Iterable<CloudNote> notes;
-  final NoteCallback onDeleteNote;
-  final NoteCallback onTap;
+class JobsListView extends StatelessWidget {
+  final Iterable<CloudJob> jobs;
+  final JobCallback onDeleteJob;
+  final JobCallback onTap;
 
-  const NotesListView({
+  const JobsListView({
     Key? key,
-    required this.notes,
-    required this.onDeleteNote,
+    required this.jobs,
+    required this.onDeleteJob,
     required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: notes.length,
+      itemCount: jobs.length,
       itemBuilder: (context, index) {
-        final note = notes.elementAt(index);
+        final job = jobs.elementAt(index);
         return ListTile(
           onTap: () {
-            onTap(note);
+            onTap(job);
           },
           title: Text(
-            'Room: ${note.roomName}.',
+            'Job: ${job.jobName}.',
             maxLines: 1,
             softWrap: true,
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            'Natural Ventilation: ${note.result}',
+            '${job.jobType} ${job.jobSubType}',
           ),
           isThreeLine: true,
           trailing: IconButton(
               onPressed: () async {
                 final shouldDelete = await showDeleteDialog(context);
                 if (shouldDelete) {
-                  onDeleteNote(note);
+                  onDeleteJob(job);
                 }
               },
               icon: const Icon(Icons.delete)),

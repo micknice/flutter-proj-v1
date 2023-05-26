@@ -9,9 +9,12 @@ import 'package:mynotes/services/auth/firebase_auth_provider.dart';
 import 'package:mynotes/views/forgot_password_view.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notes/create_update_note_view.dart';
+import 'package:mynotes/views/notes/create_update_job_view.dart';
 import 'package:mynotes/views/notes/notes_view.dart';
 import 'package:mynotes/views/register_view.dart';
 import 'package:mynotes/views/verify_email_view.dart';
+
+import 'views/notes/jobs_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +29,9 @@ void main() {
         child: const HomePage(),
       ),
       routes: {
-        createOrUpdateNoteRoute: (context) => const CreatUpdateNoteView(),
+        createOrUpdateNotesRoute: (context) => const CreatUpdateNoteView(),
+        createOrUpdateJobsRoute: (context) => const CreatUpdateJobView(),
+        notesViewRoute: (context) => const NotesView(),
       },
     ),
   );
@@ -49,7 +54,7 @@ class HomePage extends StatelessWidget {
       }
     }, builder: (context, state) {
       if (state is AuthStateLoggedIn) {
-        return const NotesView();
+        return const JobsView();
       } else if (state is AuthStateNeedsVerification) {
         return const VerifyEmailView();
       } else if (state is AuthStateLoggedOut) {

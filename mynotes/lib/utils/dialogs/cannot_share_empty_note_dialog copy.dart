@@ -11,13 +11,3 @@ Future<void> showCannotShareEmptyNoteDialog(BuildContext context) {
     },
   );
 }
-Future<void> showCannotShareEmptyJobDialog(BuildContext context) {
-  return showGenericDialog(
-    context: context,
-    title: 'Sharing',
-    content: 'You cannot share an empty job',
-    optionsBuilder: () => {
-      'Ok': null,
-    },
-  );
-}
